@@ -5,8 +5,9 @@
   var toggle = document.getElementById("nav-toggle");
   var nav = document.getElementById("nav");
   var year = document.getElementById("year");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Header state on scroll
+  /* Header state */
   var onScroll = function () {
     if (!header) return;
     header.classList.toggle("is-scrolled", window.scrollY > 8);
@@ -15,7 +16,7 @@
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  // Mobile navigation
+  /* Mobile navigation */
   var closeNav = function () {
     if (!header || !toggle) return;
     header.classList.remove("nav-open");
@@ -42,14 +43,30 @@
     });
   }
 
-  // Footer year
+  /* Footer year */
   if (year) {
     year.textContent = String(new Date().getFullYear());
   }
 
-  // Reveal on scroll
+  /* Cursor spotlight on cards */
+  if (!reduced && window.matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll(".card").forEach(function (card) {
+      var frame = null;
+
+      card.addEventListener("pointermove", function (event) {
+        if (frame) return;
+        frame = window.requestAnimationFrame(function () {
+          frame = null;
+          var rect = card.getBoundingClientRect();
+          card.style.setProperty("--mx", ((event.clientX - rect.left) / rect.width) * 100 + "%");
+          card.style.setProperty("--my", ((event.clientY - rect.top) / rect.height) * 100 + "%");
+        });
+      });
+    });
+  }
+
+  /* Reveal on scroll */
   var items = document.querySelectorAll(".reveal");
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (reduced || !("IntersectionObserver" in window)) {
     items.forEach(function (el) {
@@ -66,11 +83,11 @@
         observer.unobserve(entry.target);
       });
     },
-    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+    { rootMargin: "0px 0px -6% 0px", threshold: 0.1 }
   );
 
   items.forEach(function (el, index) {
-    el.style.transitionDelay = Math.min(index % 4, 3) * 70 + "ms";
+    el.style.transitionDelay = Math.min(index % 4, 3) * 80 + "ms";
     observer.observe(el);
   });
 })();
