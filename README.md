@@ -4,16 +4,17 @@ Marketing site for AltenOs™, an independent technology company focused on
 digital development, innovation and interactive experiences.
 
 A single page with no build step and no runtime dependencies: plain HTML, CSS
-and JavaScript, served as-is by GitHub Pages.
+and JavaScript, served as-is by GitHub Pages. Light theme, bento layout,
+hover motion and scroll reveals.
 
 ## Structure
 
 ```
-index.html                  Single page (hero, services, approach, about, contact)
-assets/styles.css           Styles, dark theme, responsive, reveal animations
-assets/main.js              Mobile menu, header state, scroll reveals
+index.html                  Single page (hero, directions, services, approach, about, contact)
+assets/styles.css           Styles: light theme, gradient ambience, bento grid, hover motion
+assets/main.js              Mobile menu, header state, cursor spotlight, scroll reveals
 assets/fonts/               AltenOs Sans (brand typeface, WOFF2 subset)
-assets/logo.png             AltenOs wordmark (white on transparent, cropped)
+assets/logo.png             AltenOs wordmark (white on transparent, inverted in CSS)
 assets/favicon.svg          “A” monogram used as the favicon
 .nojekyll                   Disables Jekyll processing on GitHub Pages
 LICENSE                     AltenOs™ proprietary licence
@@ -38,6 +39,19 @@ Then open <http://localhost:3003>.
 A custom domain can be added in the same place (GitHub then creates a `CNAME`
 file).
 
+## Design notes
+
+- **Palette**: warm paper (`#fbfbf9`), ink (`#0a0a0b`), with three accent hues —
+  indigo `#3b28ff`, mint `#00c2a8` and sand `#ffb26b`. All of them live as CSS
+  variables at the top of `assets/styles.css`.
+- **Logo**: the supplied wordmark is white, so it is inverted with
+  `filter: invert(1)` on a light background. Swap in a dark asset if you would
+  rather not rely on the filter.
+- **Motion**: drifting gradient orbs, a slow gradient pan on the headline, a
+  marquee that pauses on hover, card lift with a cursor-following spotlight,
+  animated gradient borders and a sheen sweep on the primary button. Everything
+  is disabled under `prefers-reduced-motion: reduce`.
+
 ## Typography
 
 The site is set in **AltenOs Sans**, the brand typeface, self-hosted from
@@ -47,12 +61,10 @@ converted to WOFF2 and stripped of the private-use alternates.
 
 Two things to know when editing:
 
-- The font ships a **single weight (400)**. Headings use `font-weight: 500`,
-  which renders at 400 rather than a synthesized faux bold. Keep it that way, or
-  produce a real bold weight and add a second `@font-face` rule.
+- The font ships a **single weight (400)**. Headings use 400 with tight
+  tracking, so never ask for 600 or 700: the browser would fake the bold.
 - It has **no glyph for `&`, `©`, `—` or `™`**, so those characters fall back to
-  the system stack. If you need them drawn in the brand face, add them to the
-  source font and regenerate the subset.
+  the system stack. The copy avoids them for that reason.
 
 To regenerate the WOFF2 from a new TTF:
 
@@ -70,8 +82,9 @@ python3 -m fontTools.subset AltenOs-Sans.ttf \
   (`href="https://github.com/AltenOs-Official"`) with a `mailto:` link.
 - **Share URLs**: `og:url` in `index.html` points to the GitHub Pages URL.
   Update it if a custom domain is used.
-- **Content**: services, approach and about copy live in `index.html`; colours,
-  spacing and type scale are CSS variables at the top of `assets/styles.css`.
+- **Content**: the directions, services, approach and about copy live in
+  `index.html`; colours, spacing and type scale are CSS variables at the top of
+  `assets/styles.css`.
 
 ## Licence
 
